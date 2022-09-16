@@ -1,0 +1,6 @@
+build/
+function_managers_test/GUIBinLocation.h
+test_qt_vtk/GUIBinLocation.h
+tgVersion/tgBuildDate.h
+tgVersion/tgVersion.h
+view_config_test/GUIBinLocation.h

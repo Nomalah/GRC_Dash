@@ -1,0 +1,29 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 15,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "displayName": "'default' config",
+            "description": "'default' configure using 'Visual Studio 16 2019' generator",
+            "generator": "Visual Studio 16 2019",
+            "cacheVariables": {
+                "CMAKE_POLICY_DEFAULT_CMP0091": "NEW"
+            },
+            "toolchainFile": "C:\\Users\\dhart\\Documents\\GitHub\\DiscoveryCameraGui\\build\\generators\\conan_toolchain.cmake",
+            "binaryDir": "C:\\Users\\dhart\\Documents\\GitHub\\DiscoveryCameraGui\\build"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "release",
+            "configurePreset": "default",
+            "configuration": "Release"
+        }
+    ],
+    "testPresets": []
+}
