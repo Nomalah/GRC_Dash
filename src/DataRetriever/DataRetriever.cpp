@@ -15,12 +15,12 @@ void DataRetriever::startReceiving(const char* canbus_interface_name, const std:
         while (!m_should_exit) {
             switch (this->read(frame)) {
             case RetCode::Success:
-                emit newFrame(frame);
+                newFrame(frame);
                 break;
             case RetCode::Timeout:
                 break;
             default:
-                emit newError();
+                newError();
                 break;
             }
         }
@@ -47,10 +47,6 @@ RetCode DataRetriever::openSocket(const char* canbus_interface_name, const std::
     ifr.ifr_name[IFNAMSIZ - 1] = '\0';
     ioctl(m_socket, SIOCGIFINDEX, &ifr);
 
-    sockaddr_can addr;
-    addr.can_family = AF_CAN;
-    addr.can_ifindex = ifr.ifr_ifindex;
-
     if (filters.size() > 0) {
         if (setsockopt(m_socket, SOL_CAN_RAW, CAN_RAW_FILTER, &filters.data(), sizeof(can_filter) * filters.size()) < 0) {
             return RetCode::SocketErr;
@@ -65,6 +61,10 @@ RetCode DataRetriever::openSocket(const char* canbus_interface_name, const std::
         return RetCode::SocketErr;
     }
 
+    
+    sockaddr_can addr;
+    addr.can_family = AF_CAN;
+    addr.can_ifindex = ifr.ifr_ifindex;
     if (bind(m_socket, &addr, sizeof(addr)) < 0) {
         return RetCode::SocketErr;
     }

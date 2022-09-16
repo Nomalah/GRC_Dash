@@ -14,19 +14,18 @@ enum class CanFormat : uint8_t { Standard, Extended };
 
 enum class RetCode { Success, ReadErr, OpenErr, Timeout, SocketErr };
 
-class DataRetriever : public QObject {
-    Q_OBJECT
+class DataRetriever {
   public:
-    DataRetriever(QObject* parent = nullptr);
-    ~DataRetriever() = default;
+    DataRetriever(QObject* parent = nullptr); 
+    virtual ~DataRetriever() = default;
 
   protected:
     void startReceiving(const char* canbus_interface_name, const std::vector<can_filter>& filters);
     void stopReceiving();
 
-  signals:
-    void newFrame(const can_frame);
-    void newError();
+    // As of now, newFrame and newError should be extremely fast functions before emitting more signals
+    virtual void newFrame(const can_frame) = 0;
+    virtual void newError() = 0;
 
   protected:
     static bool isError(can_frame frame);
