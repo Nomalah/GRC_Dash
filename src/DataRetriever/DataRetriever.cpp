@@ -5,7 +5,7 @@ using namespace CanBus;
 
 DataRetriever::DataRetriever(QObject* parent) : QObject(parent) {}
 
-void DataRetriever::startReceiving(const char* canbus_interface_name, canid_t mask) {
+void DataRetriever::startReceiving(const char* canbus_interface_name, const std::vector<can_filter>& filters) {
     if (this->openSocket(canbus_interface_name, mask) != RetCode::Success) {
         throw std::exception("Socket could not be opened");
     }
@@ -35,7 +35,7 @@ void DataRetriever::stopReceiving() {
     }
 }
 
-RetCode DataRetriever::openSocket(const char* canbus_interface_name, std::vector<can_filter> filters) {
+RetCode DataRetriever::openSocket(const char* canbus_interface_name, const std::vector<can_filter>& filters) {
     m_socket = socket(PF_CAN, SOCK_RAW, CAN_RAW);
     if (m_socket < 0) {
         return RetCode::SocketErr;
