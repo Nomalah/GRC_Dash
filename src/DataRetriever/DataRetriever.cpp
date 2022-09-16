@@ -33,6 +33,7 @@ void DataRetriever::stopReceiving() {
     if (m_reading_thread.joinable()) {
         m_reading_thread.join();
     }
+    ::close(m_socket);
 }
 
 RetCode DataRetriever::openSocket(const char* canbus_interface_name, const std::vector<can_filter>& filters) {
