@@ -28,3 +28,11 @@ int snake_case = 0;
 ```
 
 Formatting is handled by clang format.
+
+## Resources
+
+* [<linux/can.h>](https://github.com/torvalds/linux/blob/master/include/uapi/linux/can.h)
+* [SocketCAN Intro](https://copperhilltech.com/what-is-socketcan/)
+* [PiCAN1](https://copperhilltech.com/pican-with-gps-gyro-accelerometer-can-bus-board-for-raspberry-pi/)/[PiCAN2](https://copperhilltech.com/pican-2-can-bus-interface-for-raspberry-pi/)
+* [Raspberry Pi w/ CanBus](https://www.hackster.io/youness/how-to-connect-raspberry-pi-to-can-bus-b60235)
+* Not used, but good cross reference for the SocketCAN intro: [socketcan-cpp](https://github.com/siposcsaba89/socketcan-cpp)

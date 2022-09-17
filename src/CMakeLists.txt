@@ -13,9 +13,10 @@ set(RESOURCE_FILES
     qml.qrc
 )
 
-add_executable(DumpCanBus DumpCanBus.cpp)
+add_executable(DumpCanBus DumpCanBus.cpp CanBusDump/CanBusDump.cpp CanBusDump/CanBusDump.hpp)
 set_target_properties(DumpCanBus PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<0:>)
-target_link_libraries(DumpCanBus PRIVATE CanBusReceiver)
+target_link_libraries(DumpCanBus PRIVATE fmt::fmt Threads::Threads CanBusReceiver)
+target_include_directories(DumpCanBus PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/CanBusDump)
 
 
 # add_executable(${PROJECT_NAME} ${CODE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
@@ -36,5 +37,5 @@ if(WIN32)
         COMMAND "${windeployqt};--qmldir;${CMAKE_SOURCE_DIR};$<TARGET_FILE_DIR:${PROJECT_NAME}>"
         COMMAND_EXPAND_LISTS)
 else()
-    message(FATAL_ERROR "No deployment for unix, implement.")
+    # message(FATAL_ERROR "No deployment for unix, implement.")
 endif()
