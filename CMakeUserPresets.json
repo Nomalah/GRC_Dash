@@ -1,7 +1,0 @@
-{
-    "version": 4,
-    "include": [
-        "C:\\Users\\dhart\\Documents\\GitHub\\ViewLS\\build\\generators\\CMakePresets.json",
-        "C:\\Users\\dhart\\Documents\\GitHub\\DiscoveryCameraGui\\build\\generators\\CMakePresets.json"
-    ]
-}
