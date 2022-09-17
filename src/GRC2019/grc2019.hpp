@@ -1,9 +1,9 @@
 // #pragma once
 
 // #include <QObject>
-// #include <DataRetriever.hpp>
+// #include <Receiver.hpp>
 
-// class GRC2019DataRetriever : public DataRetriever {
+// class GRC2019DataRetriever : public Receiver {
 //     Q_OBJECT
 //   public:
 //     GRC2019DataRetriever(QObject* parent = nullptr);

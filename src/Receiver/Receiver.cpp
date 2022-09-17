@@ -3,9 +3,9 @@
 
 using namespace CanBus;
 
-DataRetriever::DataRetriever(QObject* parent) : QObject(parent) {}
+Receiver::Receiver(uint32_t read_timeout) : m_read_timeout(50) {}
 
-void DataRetriever::startReceiving(const char* canbus_interface_name, const std::vector<can_filter>& filters) {
+void Receiver::startReceiving(const char* canbus_interface_name, const std::vector<can_filter>& filters) {
     if (this->openSocket(canbus_interface_name, mask) != RetCode::Success) {
         throw std::exception("Socket could not be opened");
     }
@@ -28,7 +28,7 @@ void DataRetriever::startReceiving(const char* canbus_interface_name, const std:
     });
 }
 
-void DataRetriever::stopReceiving() {
+void Receiver::stopReceiving() {
     m_should_exit = true;
     if (m_reading_thread.joinable()) {
         m_reading_thread.join();
@@ -36,7 +36,7 @@ void DataRetriever::stopReceiving() {
     ::close(m_socket);
 }
 
-RetCode DataRetriever::openSocket(const char* canbus_interface_name, const std::vector<can_filter>& filters) {
+RetCode Receiver::openSocket(const char* canbus_interface_name, const std::vector<can_filter>& filters) {
     m_socket = socket(PF_CAN, SOCK_RAW, CAN_RAW);
     if (m_socket < 0) {
         return RetCode::SocketErr;
@@ -71,7 +71,7 @@ RetCode DataRetriever::openSocket(const char* canbus_interface_name, const std::
     return RetCode::Success;
 }
 
-RetCode DataRetriever::read(can_frame& frame) {
+RetCode Receiver::read(can_frame& frame) {
     // Read in a CAN frame
     auto num_bytes = ::read(m_socket, &frame, sizeof(frame));
     if (num_bytes != sizeof(frame)) {
@@ -80,23 +80,23 @@ RetCode DataRetriever::read(can_frame& frame) {
     return RetCode::Success;
 }
 
-bool DataRetriever::isError(can_frame frame) {
+bool Receiver::isError(can_frame frame) {
     return frame.can_id & CAN_ERR_FLAG;
 }
 
-bool DataRetriever::isRemoteTransmissionRequest(can_frame frame) {
+bool Receiver::isRemoteTransmissionRequest(can_frame frame) {
     return frame.can_id & CAN_RTR_FLAG;
 }
 
-CanFormat DataRetriever::frameFormat(can_frame frame) {
+CanFormat Receiver::frameFormat(can_frame frame) {
     if (frame & CAN_EFF_FLAG) {
         return CanFormat::Extended
     }
     return CanFormat::Standard;
 }
 
-canid_t DataRetriever::frameId(can_frame frame) {
-    switch (DataRetriever::frameFormat(frame)) {
+canid_t Receiver::frameId(can_frame frame) {
+    switch (Receiver::frameFormat(frame)) {
     case CanFormat::Standard:
         return frame.can_id & CAN_SFF_MASK; // 11 LSB
     case CanFormat::Extended:
@@ -106,4 +106,8 @@ canid_t DataRetriever::frameId(can_frame frame) {
     }
     assert(false); // Only 2 formats supported
     return 0;
+}
+
+Receiver::~Receiver() {
+    this->stopReceiving();
 }

@@ -1,11 +1,11 @@
+add_subdirectory(Receiver)
+
 set(CODE_FILES
     main.cpp
-    DataRetriever/DataRetriever.cpp
     # GRC2019/grc2019.cpp
 )
 
 set(HEADER_FILES
-    DataRetriever/DataRetriever.hpp
     GRC2019/grc2019.hpp
 )
 
@@ -13,14 +13,18 @@ set(RESOURCE_FILES
     qml.qrc
 )
 
+add_executable(DumpCanBus DumpCanBus.cpp)
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<0:>)
+target_link_libraries(${PROJECT_NAME} PRIVATE CanBusReceiver)
+
+
 add_executable(${PROJECT_NAME} ${CODE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<0:>)
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/DataRetriever
     ${CMAKE_CURRENT_SOURCE_DIR}/GRC2019
 )
-target_link_libraries(${PROJECT_NAME} PRIVATE qt::qt)
+target_link_libraries(${PROJECT_NAME} PRIVATE qt::qt CanBusReceiver)
 
 # TODO: Add the deployment for linux
 if(WIN32)

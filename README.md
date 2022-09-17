@@ -15,4 +15,16 @@ Run the conan build script
 conan build -if build .
 ```
 
-Final executables will be found in the build folder.
+Final executables will be found in the build/bin folder.
+
+## Code Standards
+
+Naming standards are as follows:
+```C++
+namespace PascalCase {}
+class PascalCase {};
+int camelCase() {};
+int snake_case = 0;
+```
+
+Formatting is handled by clang format.

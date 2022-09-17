@@ -63,6 +63,7 @@ class GRCDash(ConanFile):
         self.requires("freetype/2.12.1") # Qt conflicts with PublicAPI
         self.requires("openssl/1.1.1q") # Qt conflicts with CycloneDDS
         self.requires("qt/5.15.5")
+        self.requires("fmt/9.0.0")
         self.setOptionsQT()
 
     def layout(self):
