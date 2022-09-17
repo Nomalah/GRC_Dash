@@ -23,15 +23,15 @@ class GRCDash(ConanFile):
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
-        "dash_year": [2019, 2020, 2022],
-        "front_end_only": [True, False]
+        # "dash_year": [2019, 2020, 2022],
+        # "front_end_only": [True, False]
     }
 
     default_options = {
         "shared": False,
         "fPIC": True,
-        "dash_year": 2019,
-        "front_end_only": False
+        # "dash_year": 2019,
+        # "front_end_only": False
     }
 
     generators = "CMakeDeps"#, "qt"
@@ -41,14 +41,20 @@ class GRCDash(ConanFile):
         if self.settings.os == "Windows" and not self.options.front_end_only:
             raise ConanInvalidConfiguration("Windows backend for canbus not supported")
 
+
+    def requirements(self):
+        self.requires("qt/6.3.1")
+        self.requires("fmt/9.0.0")
+
     def configure(self):
         if self.settings.compiler == 'Visual Studio':
             del self.options.fPIC
 
-    def requirements(self):
-        # self.requires("qt/6.3.1")
-        self.requires("fmt/9.0.0")
-        # self.setOptionsQT()
+        self.options["qt"].shared = True
+        self.options["qt"].qtdeclarative = True
+        self.options["qt"].qttools = True
+        self.options["qt"].qtshadertools = True
+        self.options["qt"].with_libjpeg = "libjpeg-turbo"
 
     def layout(self):
         cmake_layout(self)

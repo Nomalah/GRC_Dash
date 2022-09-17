@@ -4,7 +4,27 @@
 
 An electronic dash for the different GRC vehicles 
 
-## Installing & Building with Conan
+## Installing & Building on a Raspberry Pi
+
+### Initial setup
+
+Install all missing packages
+```bash
+sudo apt-get install python cmake libgl-dev libx11-dev libx11-xcb-dev libxcb-util-dev m4 libffi-dev
+```
+
+Install conan
+```bash
+python -m pip install conan
+```
+
+Add python directory to path
+```bash
+sudo apt-get install python 
+```
+
+### Following builds
+
 Run the conan install script (`-pr` is the profile being used, the options are found in [ConanProfiles](./ConanProfiles/))
 ```bash
 conan install . -if build -pr:h=ConanProfiles/Visual-Studio-2019-Release -pr:b=ConanProfiles/Visual-Studio-2019-Release --build=missing
