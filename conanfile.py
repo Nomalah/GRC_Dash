@@ -46,7 +46,7 @@ class GRCDash(ConanFile):
             del self.options.fPIC
 
     def requirements(self):
-        # self.requires("qt/6.3.1")
+        self.requires("qt/6.3.1")
         self.requires("fmt/9.0.0")
         # self.setOptionsQT()
 

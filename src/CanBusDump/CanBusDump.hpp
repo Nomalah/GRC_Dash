@@ -2,7 +2,7 @@
 
 #include "Receiver.hpp"
 
-namespace CanBus {
+namespace CAN {
 
 class CanBusDump : public Receiver {
   public:

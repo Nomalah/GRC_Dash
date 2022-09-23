@@ -8,7 +8,7 @@
 
 #include <linux/can.h>
 
-namespace CanBus {
+namespace CAN {
 
 enum class CanFormat : uint8_t { Standard, Extended };
 
@@ -52,4 +52,4 @@ class Receiver {
     std::atomic<bool> m_should_exit = false;
 };
 
-} // namespace CanBus
+} // namespace CAN

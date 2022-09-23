@@ -6,7 +6,6 @@ set(CODE_FILES
 )
 
 set(HEADER_FILES
-    GRC2019/grc2019.hpp
 )
 
 set(RESOURCE_FILES
