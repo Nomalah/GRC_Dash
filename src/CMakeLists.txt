@@ -1,8 +1,7 @@
-add_subdirectory(Receiver)
+add_subdirectory(RuntimeQml)
 
 set(CODE_FILES
     main.cpp
-    # GRC2019/grc2019.cpp
 )
 
 set(HEADER_FILES
@@ -12,19 +11,12 @@ set(RESOURCE_FILES
     qml.qrc
 )
 
-add_executable(DumpCanBus DumpCanBus.cpp CanBusDump/CanBusDump.cpp CanBusDump/CanBusDump.hpp)
-set_target_properties(DumpCanBus PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<0:>)
-target_link_libraries(DumpCanBus PRIVATE fmt::fmt Threads::Threads CanBusReceiver)
-target_include_directories(DumpCanBus PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/CanBusDump)
-
-
-# add_executable(${PROJECT_NAME} ${CODE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
-# set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<0:>)
-# target_include_directories(${PROJECT_NAME} PRIVATE
-#     ${CMAKE_CURRENT_SOURCE_DIR}
-#     ${CMAKE_CURRENT_SOURCE_DIR}/GRC2019
-# )
-# target_link_libraries(${PROJECT_NAME} PRIVATE qt::qt CanBusReceiver)
+add_executable(${PROJECT_NAME} ${CODE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<0:>)
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+target_link_libraries(${PROJECT_NAME} PRIVATE qt::qt RuntimeQml)
 
 # TODO: Add the deployment for linux
 if(WIN32)
