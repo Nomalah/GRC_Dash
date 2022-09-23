@@ -13,10 +13,11 @@ set(RESOURCE_FILES
 
 add_executable(${PROJECT_NAME} ${CODE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<0:>)
+target_compile_definitions(${PROJECT_NAME} PRIVATE ROOT_SOURCE_PATH="${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
-target_link_libraries(${PROJECT_NAME} PRIVATE qt::qt RuntimeQml)
+target_link_libraries(${PROJECT_NAME} PRIVATE qt::qt fmt::fmt RuntimeQml)
 
 # TODO: Add the deployment for linux
 if(WIN32)
