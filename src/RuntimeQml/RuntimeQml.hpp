@@ -5,13 +5,14 @@
 #include <QScopedPointer>
 
 class RuntimeQmlPrivate;
-class RuntimeQml : public QObject
-{
+class RuntimeQml : public QObject {
     Q_OBJECT
     Q_PROPERTY(bool autoReload READ autoReload WRITE setAutoReload NOTIFY autoReloadChanged)
 
-public:
+  public:
     explicit RuntimeQml(QQmlApplicationEngine* engine, QObject* parent = nullptr);
+    RuntimeQml(const RuntimeQml&) = delete;
+    RuntimeQml operator=(const RuntimeQml&) = delete;
     ~RuntimeQml() override;
 
     void parseQrc(QString const& qrcFilename);
@@ -33,14 +34,14 @@ public:
 
     QList<QString> const& ignoreFiltersList() const;
 
-signals:
+  signals:
     void autoReloadChanged(bool autoReload);
     void reloaded();
 
-private slots:
+  private slots:
     void reloadQml();
 
-private:
+  private:
     Q_DECLARE_PRIVATE_D(dd_ptr, RuntimeQml)
     QScopedPointer<RuntimeQmlPrivate> dd_ptr;
 };

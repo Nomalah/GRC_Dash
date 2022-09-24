@@ -26,8 +26,12 @@ if(WIN32)
 
     add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND "${windeployqt};--qmldir;${CMAKE_SOURCE_DIR};$<TARGET_FILE_DIR:${PROJECT_NAME}>"
+        COMMAND "${windeployqt};--qmldir;${CMAKE_SOURCE_DIR}/src;$<TARGET_FILE:${PROJECT_NAME}>"
         COMMAND_EXPAND_LISTS)
+elseif(UNIX AND NOT APPLE)
+    message(STATUS "No deployment for Linux, implement.")
+elseif(APPLE)
+    message(STATUS "No deployment for Apple, implement.")
 else()
-    # message(FATAL_ERROR "No deployment for unix, implement.")
+    message(STATUS "No deployment for unknown platform, implement.")
 endif()
