@@ -23,28 +23,21 @@ class GRCDash(ConanFile):
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
-        # "dash_year": [2019, 2020, 2022],
-        # "front_end_only": [True, False]
+        "front_end_only": [True, False]
     }
 
     default_options = {
         "shared": False,
         "fPIC": True,
-        # "dash_year": 2019,
-        # "front_end_only": False
+        "front_end_only": False
     }
 
-    generators = "CMakeDeps"#, "qt"
+    generators = "CMakeDeps", "qt"
     exports_sources = "CMakeLists.txt", "src/*"
 
     def validate(self):
         if self.settings.os == "Windows" and not self.options.front_end_only:
             raise ConanInvalidConfiguration("Windows backend for canbus not supported")
-
-
-    def requirements(self):
-        self.requires("qt/6.3.1")
-        self.requires("fmt/9.0.0")
 
     def configure(self):
         if self.settings.compiler == 'Visual Studio':
@@ -64,7 +57,7 @@ class GRCDash(ConanFile):
     
     def generate(self):
         tc = CMakeToolchain(self)
-        #tc.variables["QT_BIN_PATH"] = self.deps_cpp_info["qt"].bin_paths[0].replace("\\", "/")
+        tc.variables["QT_BIN_PATH"] = self.deps_cpp_info["qt"].bin_paths[0].replace("\\", "/")
         tc.generate()
 
     def build(self):
