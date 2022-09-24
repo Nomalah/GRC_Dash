@@ -5,11 +5,11 @@
 using namespace CAN;
 
 CanBusDump::CanBusDump() 
-    : Receiver(150){
+    : Interface(150){
 }
 
 void CanBusDump::startReceiving(){
-    this->Receiver::startReceiving("can0", m_filters); // Get everything
+    this->Interface::startReceiving("can0", m_filters); // Get everything
 }
 
 void CanBusDump::newFrame(const can_frame& frame) {

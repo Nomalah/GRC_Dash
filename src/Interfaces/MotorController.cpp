@@ -5,11 +5,11 @@
 using namespace CAN::Interface;
 
 MotorController::MotorController() 
-    : Receiver(150){
+    : Interface(150){
 }
 
 void MotorController::startReceiving(){
-    this->Receiver::startReceiving("can0", m_filters); // Get everything
+    this->Interface::startReceiving("can0", m_filters); // Get everything
 }
 
 void MotorController::newFrame(const can_frame& frame) {

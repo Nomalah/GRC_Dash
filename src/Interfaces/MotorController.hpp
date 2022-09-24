@@ -10,9 +10,7 @@
 #include <map>
 #include <functional>
 
-#include "Receiver.h"
-
-namespace CAN {
+#include <CANLib/Interface/Interface.hpp>
 
 // https://stackoverflow.com/questions/23454793/whats-the-c-11-way-to-fire-off-an-asynchronous-task-and-forget-about-it
 template <class F>
@@ -23,9 +21,8 @@ void callAsync(F&& fun) {
     });
 }
 
-namespace CAN::Interface {
 
-class MotorController : public Receiver, public QObject {
+class MotorController : public Interface, public QObject {
     Q_OBJECT
   public:
     MotorController(); 
@@ -105,12 +102,3 @@ public:
         DCBusCurrent
     };
 };
-
-namespace MotorControllerHandlers {
-    void handleAddress0x0A0(const can_frame&)
-}
-
-}
-
-
-} // namespace CAN
