@@ -2,9 +2,9 @@
 
 #include "Receiver.hpp"
 
-namespace CanBus {
+namespace CAN::Interface {
 
-class CanBusDump : public Receiver {
+class Dump : public Interface {
   public:
     CanBusDump(); 
     ~CanBusDump() = default;

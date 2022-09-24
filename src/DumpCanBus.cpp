@@ -1,7 +1,7 @@
 #include "CanBusDump.hpp"
 
 int main() {
-    CanBus::CanBusDump dumper;
+    CAN::CanBusDump dumper;
     dumper.startReceiving();
     while (true){ // Require force killing of program with ^C
         using namespace std::chrono_literals;

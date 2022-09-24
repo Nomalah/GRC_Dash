@@ -52,9 +52,12 @@ class GRCDash(ConanFile):
 
         self.options["qt"].shared = True
         self.options["qt"].qtdeclarative = True
-        self.options["qt"].qttools = True
         self.options["qt"].qtshadertools = True
         self.options["qt"].with_libjpeg = "libjpeg-turbo"
+
+    def requirements(self):
+        self.requires("qt/6.3.1")
+        self.requires("fmt/9.0.0")
 
     def layout(self):
         cmake_layout(self)
