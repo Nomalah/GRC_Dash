@@ -1,6 +1,6 @@
 #include <fmt/core.h>
 
-#include "CanBusDump.hpp"
+#include <Dump.hpp>
 
 using namespace CAN;
 

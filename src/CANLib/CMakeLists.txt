@@ -1,11 +1,18 @@
 set(CODE_FILES
-    Receiver.cpp
+    Interface/Interface.cpp
+    Tools/tools.cpp
 )
 
 set(HEADER_FILES
-    Receiver.hpp
+    Interface/Interface.hpp
+    Tools/tools.hpp
+    defs.hpp
 )
 
-add_library(CanBusReceiver ${CODE_FILES} ${HEADER_FILES})
-set_target_properties(CanBusReceiver PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/$<0:>)
-target_include_directories(CanBusReceiver PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_library(CANLib ${CODE_FILES} ${HEADER_FILES})
+set_target_properties(CANLib PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/$<0:>)
+target_include_directories(CANLib PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/Interface
+    ${CMAKE_CURRENT_SOURCE_DIR}/Tools
+)

@@ -2,6 +2,7 @@
 
 #include <atomic>
 #include <cstdint>
+#include <cstddef>
 #include <thread>
 #include <vector>
 #include <stdexcept>
@@ -32,17 +33,17 @@ class Interface {
     virtual void newError() = 0;
 
     template <size_t N>
-    RetCode Interface::write(uint32_t address, const byte (&payload)[N], bool extended = false, bool error_frame = false, bool remote_transmission_request = false){
+    RetCode write(uint32_t address, const std::byte (&payload)[N], bool extended = false, bool error_frame = false, bool remote_transmission_request = false){
         static_assert(1 <= N && N <= 8, "Size of payload must be between 1 and 8");
         if (address & 0xE0000000) { // Disallow passing anything but the address.
-            return RetCode::Invalid;
+            return RetCode::InvalidParam;
         }
 
         if ((address & 0x1FFFF800) && !extended) { // Check if there are any bits in the extended section.
-            return RetCode::Invalid;
+            return RetCode::InvalidParam;
         }
 
-        if (extended){
+        if (extended) {
             address |= CAN_EFF_FLAG; // Set extended format.
         }
         
@@ -51,7 +52,7 @@ class Interface {
         frame.len = N;
         memcpy(frame.data, payload, N);
         
-        if (write(s, &frame, sizeof(frame)) != sizeof(frame)) {
+        if (::write(m_socket, (void*)&frame, sizeof(frame)) != sizeof(frame)) {
             return RetCode::WriteErr;
         }
 

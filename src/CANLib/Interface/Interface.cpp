@@ -6,7 +6,7 @@
 #include <sys/ioctl.h>
 #include <linux/can/raw.h>
 
-#include "Receiver.hpp"
+#include <Interface.hpp>
 
 using namespace CAN;
 

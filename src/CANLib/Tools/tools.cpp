@@ -1,3 +1,4 @@
+#include <cassert>
 #include <tools.hpp>
 
 bool CAN::isError(const can_frame& frame) {

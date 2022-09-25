@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Receiver.hpp"
+#include <Interface.hpp>
 
 namespace CAN::Interface {
 
