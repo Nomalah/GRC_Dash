@@ -29,7 +29,7 @@ class GRCDash(ConanFile):
         "front_end_only": False
     }
 
-    generators = "CMakeDeps"#, "qt"
+    generators = "CMakeDeps", "qt"
     exports_sources = "CMakeLists.txt", "src/*"
 
     def validate(self):
