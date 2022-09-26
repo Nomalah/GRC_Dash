@@ -23,20 +23,20 @@ class GRCDash(ConanFile):
     options = {
         "shared": [True, False],
         "fPIC": [True, False],
-        "front_end_only": [True, False]
+        "dev": ["front", "back", "full"]
     }
 
     default_options = {
         "shared": False,
         "fPIC": True,
-        "front_end_only": False
+        "dev": "full"
     }
 
     generators = "CMakeDeps", "qt"
     exports_sources = "CMakeLists.txt", "src/*"
 
     def validate(self):
-        if self.settings.os == "Windows" and not self.options.front_end_only:
+        if self.settings.os == "Windows" and self.options.dev != "front":
             raise ConanInvalidConfiguration("Windows backend for canbus not supported")
 
     def configure(self):
@@ -49,7 +49,8 @@ class GRCDash(ConanFile):
         self.options["qt"].with_libjpeg = "libjpeg-turbo"
 
     def requirements(self):
-        self.requires("qt/6.3.1")
+        if self.options.dev != "back":
+            self.requires("qt/6.3.1")
         self.requires("fmt/9.0.0")
 
     def layout(self):
@@ -57,10 +58,17 @@ class GRCDash(ConanFile):
     
     def generate(self):
         tc = CMakeToolchain(self)
-        tc.variables["QT_BIN_PATH"] = self.deps_cpp_info["qt"].bin_paths[0].replace("\\", "/")
+        if self.options.dev != "back":
+            tc.variables["QT_BIN_PATH"] = self.deps_cpp_info["qt"].bin_paths[0].replace("\\", "/")
         tc.generate()
 
     def build(self):
         cmake = CMake(self)
         cmake.configure()
-        cmake.build()
+        
+        if self.options.dev != "front":
+            cmake.build(target="CANLib")
+            cmake.build(target="BusDump")
+
+        if self.options.dev != "back":
+            cmake.build(target="GryphonDash")
