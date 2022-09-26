@@ -1,12 +1,9 @@
-from conans import ConanFile, errors
+from conans import ConanFile
 from conan.tools.cmake import CMake, CMakeToolchain
-from conan.tools.layout import basic_layout, cmake_layout
+from conan.tools.layout import cmake_layout
 from conan.tools.build import cross_building
-from conan.tools.files import copy
 from conans.errors import ConanInvalidConfiguration
 import os
-import glob
-import subprocess
 
 class GRCDash(ConanFile):
     scm = {
