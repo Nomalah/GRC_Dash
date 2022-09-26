@@ -49,7 +49,7 @@ RetCode Interface::openSocket(const char* canbus_interface_name, const can_filte
     ioctl(m_socket, SIOCGIFINDEX, &ifr);
 
     if (filter_count > 0) {
-        if (setsockopt(m_socket, SOL_CAN_RAW, CAN_RAW_FILTER, &filters, sizeof(can_filter) * filter_count) < 0) {
+        if (setsockopt(m_socket, SOL_CAN_RAW, CAN_RAW_FILTER, filters, sizeof(can_filter) * filter_count) < 0) {
             return RetCode::SocketErr;
         }
     }
