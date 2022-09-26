@@ -68,4 +68,5 @@ class GRCDash(ConanFile):
             cmake.build(target="BusDump")
 
         if self.options.dev != "back":
+            cmake.build(target="RuntimeQml")
             cmake.build(target="GryphonDash")

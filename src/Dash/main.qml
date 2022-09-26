@@ -8,6 +8,6 @@ ApplicationWindow{
     title: "GRC Dash"
     Rectangle {
         anchors.fill: parent
-        color: "Purple"
+        color: "Green"
     }
 }
