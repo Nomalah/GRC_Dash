@@ -2,6 +2,7 @@
 
 #if __linux__
 #include <linux/can.h>
+#include <unistd.h>
 #else
 
 #endif

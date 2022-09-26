@@ -1,5 +1,6 @@
 #include <cassert>
 #include <cstring>
+#include <cerrno>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <net/if.h>
@@ -10,8 +11,6 @@
 
 using namespace CAN;
 
-Interface::Interface(uint32_t read_timeout_ms) : m_read_timeout_ms(50) {}
-
 void Interface::readLoop(){
     can_frame frame = {};
     while (!this->m_should_exit) {
@@ -20,9 +19,10 @@ void Interface::readLoop(){
             this->newFrame(frame);
             break;
         case RetCode::Timeout:
+            this->newTimeout();
             break;
         default:
-            this->newError();
+            this->newError(frame);
             break;
         }
     }
@@ -37,7 +37,7 @@ void Interface::stopReceiving() {
     ::close(m_socket);
 }
 
-RetCode Interface::openSocket(const char* canbus_interface_name, can_filter* filters, size_t filter_count) {
+RetCode Interface::openSocket(const char* canbus_interface_name, const can_filter* filters, size_t filter_count, uint32_t read_timeout_ms) {
     m_socket = socket(PF_CAN, SOCK_RAW, CAN_RAW);
     if (m_socket < 0) {
         return RetCode::SocketErr;
@@ -54,14 +54,15 @@ RetCode Interface::openSocket(const char* canbus_interface_name, can_filter* fil
         }
     }
 
-    timeval tv;
-    tv.tv_sec = 0;                         
-    tv.tv_usec = m_read_timeout_ms * 1000; // 50 milliseconds
-    
-    if (setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(timeval)) < 0) {
-        return RetCode::SocketErr;
+    if (read_timeout_ms != 0){
+        timeval tv;
+        tv.tv_sec = 0;                         
+        tv.tv_usec = read_timeout_ms * 1000;
+        
+        if (setsockopt(m_socket, SOL_SOCKET, SO_RCVTIMEO, (void*)&tv, sizeof(timeval)) < 0) {
+            return RetCode::SocketErr;
+        }
     }
-
     
     sockaddr_can addr;
     addr.can_family = AF_CAN;
@@ -75,7 +76,14 @@ RetCode Interface::openSocket(const char* canbus_interface_name, can_filter* fil
 RetCode Interface::read(can_frame& frame) {
     // Read in a CAN frame
     auto num_bytes = ::read(m_socket, &frame, sizeof(frame));
-    if (num_bytes != sizeof(frame)) {
+    if (num_bytes == -1) { // Error during read
+        if (errno == EAGAIN){ // ::read timed out
+            return RetCode::Timeout;
+        }
+        return RetCode::ReadErr;
+    }
+
+    if (num_bytes != sizeof(frame)) { // Not all bytes were retrieved
         return RetCode::ReadErr;
     }
     return RetCode::Success;

@@ -3,7 +3,7 @@
 #include <Dump.hpp>
 
 int main() {
-    CAN::Interface::Dump dumper;
+    CAN::Interfaces::Dump dumper;
     dumper.startReceiving();
     while (true){ // Require force killing of program with ^C
         using namespace std::chrono_literals;

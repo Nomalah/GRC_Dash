@@ -14,7 +14,7 @@ set_target_properties(GryphonDash PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BI
 target_include_directories(GryphonDash PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
-target_link_libraries(GryphonDash PRIVATE fmt::fmt)
+target_link_libraries(GryphonDash PRIVATE fmt::fmt qt::qt)
 
 # TODO: Add the deployment for linux
 if(WIN32)

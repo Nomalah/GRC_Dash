@@ -13,13 +13,13 @@ namespace CAN {
 
 class Interface {
   public:
-    Interface(uint32_t read_timeout_ms = 50); 
+    Interface() = default; 
     virtual ~Interface();
 
   protected:
     template <size_t N>
-    RetCode startReceiving(const char* canbus_interface_name, can_filter (&filters)[N]){
-        if (this->openSocket(canbus_interface_name, filters, N) != RetCode::Success) {
+    RetCode startReceiving(const char* canbus_interface_name, const can_filter (&filters)[N], uint32_t read_timeout_ms){
+        if (this->openSocket(canbus_interface_name, filters, N, read_timeout_ms) != RetCode::Success) {
             return RetCode::SocketErr;
         }
 
@@ -28,9 +28,10 @@ class Interface {
     }
     void stopReceiving();
 
-    // As of now, newFrame and newError should be extremely fast functions before emitting more signals
+    // As of now, newFrame, newError and newTimeout should be extremely fast functions before emitting more signals
     virtual void newFrame(const can_frame&) = 0;
-    virtual void newError() = 0;
+    virtual void newError(const can_frame&) = 0;
+    virtual void newTimeout() = 0;
 
     template <size_t N>
     RetCode write(uint32_t address, const std::byte (&payload)[N], bool extended = false, bool error_frame = false, bool remote_transmission_request = false){
@@ -60,13 +61,12 @@ class Interface {
     }
 
   private:
-    RetCode openSocket(const char* canbus_interface_name, can_filter* filters, size_t filter_count);
+    RetCode openSocket(const char* canbus_interface_name, const can_filter* filters, size_t filter_count, uint32_t read_timeout_ms);
     RetCode read(can_frame& frame);
     void readLoop();
 
   private:
     int32_t m_socket = -1;
-    uint32_t m_read_timeout_ms; // 50ms timeout for reading by default
 
     std::thread m_reading_thread;
     std::atomic<bool> m_should_exit = false;
